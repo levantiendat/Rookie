@@ -40,3 +40,11 @@
     transform: rotate(360deg);
   }
 }
+.custom-button {
+    background-color: red;
+    color: green;
+    border: none; /* Remove default border */
+    padding: 0.375rem 0.75rem; /* Bootstrap padding */
+    font-size: 1rem; /* Bootstrap font size */
+    border-radius: 0.25rem; /* Bootstrap border radius */
+  }

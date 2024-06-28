@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import ReactPlayer from 'react-player';
+import './App.css'; // Ensure this is imported
 
 function App() {
   const [videoURL, setVideoURL] = useState(null);
@@ -7,7 +8,7 @@ function App() {
   const [played, setPlayed] = useState(0);
   const [playedInput, setPlayedInput] = useState([]);
 
-  const [inputs, setInputs] = useState(['']); // Initial state with one input
+  const [inputs, setInputs] = useState([]); // Initial state with one input
 
   const handleAddInput = () => {
     setInputs([...inputs, '']);
@@ -63,3 +64,4 @@ function App() {
 }
 
 export default App;
+
