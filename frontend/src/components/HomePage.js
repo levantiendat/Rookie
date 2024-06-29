@@ -6,6 +6,7 @@ import logo from './Tiktok_background.png';  // Import the logo image
 
 export default function HomePage() {
     const [videoURL, setVideoURL] = useState(null);
+    const [audioURL, setAudioURL] = useState(null);
     const [subtitles, setSubtitles] = useState([]);
     const [played, setPlayed] = useState(0);
     const [playedInput, setPlayedInput] = useState([]);
@@ -36,6 +37,14 @@ export default function HomePage() {
         }
     };
 
+    const handleAudioUpload = (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            const url = URL.createObjectURL(file);
+            setAudioURL(url);
+        }
+    };
+
     const handleProgress = ({ playedSeconds }) => {
         setSubtitles([...subtitles, `Subtitle at ${playedSeconds} seconds`]);
         setPlayed(playedSeconds);
@@ -62,11 +71,13 @@ export default function HomePage() {
             <div className="content">
                 <div className="video-section">
                     <div className="mb-3">
+                        <label htmlFor="videoUpload" className="form-label">Input your Video</label>
                         <input 
                             type="file" 
                             accept="video/*" 
                             onChange={handleVideoUpload} 
                             className="form-control" 
+                            id="videoUpload"
                         />
                     </div>
                     {videoURL && (
@@ -79,8 +90,21 @@ export default function HomePage() {
                             />
                         </div>
                     )}
+                    <div className="audio-upload mt-3">
+                        <label htmlFor="audioUpload" className="form-label">Input your Audio</label>
+                        <input 
+                            type="file" 
+                            accept="audio/*" 
+                            onChange={handleAudioUpload} 
+                            className="form-control" 
+                            id="audioUpload"
+                        />
+                        {audioURL && (
+                            <audio controls src={audioURL} className="mt-2" />
+                        )}
+                    </div>
                 </div>
-                <div className="inputs-section">
+                <div className="inputs-section mt-3">
                     <div className="inputs-container">
                         {inputs.map((input, index) => (
                             <div key={index} className="subtitle-input">
@@ -97,14 +121,14 @@ export default function HomePage() {
                     <button onClick={handleAddInput} className="btn btn-primary mt-2">
                         Add New Input
                     </button>
-                    <button 
-                        onClick={handleEnter} 
-                        className="btn btn-success mt-2" 
-                        disabled={!isEnterEnabled}
-                    >
-                        Enter
-                    </button>
                 </div>
+                <button 
+                    onClick={handleEnter} 
+                    className="btn btn-success mt-3" 
+                    disabled={!isEnterEnabled}
+                >
+                    SUBMIT TO GENERATE
+                </button>
             </div>
         </div>
     );
