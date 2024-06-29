@@ -80,7 +80,7 @@ export default function HomePage() {
                             id="videoUpload"
                         />
                     </div>
-                    {videoURL && (
+                    {videoURL ? (
                         <div className="react-player-wrapper">
                             <ReactPlayer
                                 url={videoURL}
@@ -88,6 +88,11 @@ export default function HomePage() {
                                 onProgress={handleProgress}
                                 className="react-player"
                             />
+                        </div>
+                    ) : (
+                        <div className="react-player-placeholder">
+                            {/* Placeholder box when no video is uploaded */}
+                            <div className="gray-box"></div>
                         </div>
                     )}
                     <div className="audio-upload mt-3">
@@ -133,3 +138,4 @@ export default function HomePage() {
         </div>
     );
 }
+
