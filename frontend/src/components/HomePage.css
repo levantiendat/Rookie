@@ -1,3 +1,4 @@
+/* Ensure everything looks consistent across different devices */
 body {
   font-family: 'Arial', sans-serif;
   background-color: #f8f9fa;
@@ -25,8 +26,21 @@ body {
 }
 
 .logo {
-  width: 100px;  /* Adjust size as needed */
+  width: 150px;  /* Adjust size as needed */
   height: auto;  /* Maintain aspect ratio */
+}
+
+/* Layout for content */
+.content {
+  display: flex;
+  flex-wrap: wrap; /* Allows wrapping on small screens */
+  justify-content: space-between;
+}
+
+/* Video section styling */
+.video-section {
+  flex: 2; /* Takes more space */
+  margin-right: 20px;
 }
 
 /* Styling the file input */
@@ -53,7 +67,20 @@ input[type="file"] {
   overflow: hidden;
 }
 
-/* Input field for subtitles */
+/* Inputs section styling */
+.inputs-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; /* Hide overflow on main container */
+}
+
+.inputs-container {
+  overflow-y: auto; /* Add vertical scrollbar */
+  max-height: 60vh; /* Limit height */
+  padding-right: 10px; /* Space for scrollbar */
+}
+
 .subtitle-input {
   display: flex;
   align-items: center;
@@ -61,7 +88,7 @@ input[type="file"] {
 }
 
 .subtitle-input span {
-  min-width: 80px;
+  min-width: 60px;
   text-align: center;
   color: #6c757d;
   flex: 0 0 auto;
@@ -76,7 +103,6 @@ input[type="file"] {
 
 /* Buttons styling */
 .btn-primary, .btn-success {
-  display: block;
   width: 100%;
   padding: 10px;
   border-radius: 5px;
