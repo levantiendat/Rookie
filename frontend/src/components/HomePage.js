@@ -6,12 +6,14 @@ import logo from './Tiktok_background.png';  // Import the logo image
 
 export default function HomePage() {
     const [videoURL, setVideoURL] = useState(null);
+    const [videoFile, setVideoFile] = useState(null);
     const [audioURL, setAudioURL] = useState(null);
     const [subtitles, setSubtitles] = useState([]);
     const [played, setPlayed] = useState(0);
     const [playedInput, setPlayedInput] = useState([]);
     const [inputs, setInputs] = useState([]);
     const [isEnterEnabled, setIsEnterEnabled] = useState(false);
+    const [apiResponse, setApiResponse] = useState(null); // State to store API response
 
     useEffect(() => {
         // Enable the "Enter" button only if all input fields are filled
@@ -34,6 +36,7 @@ export default function HomePage() {
         if (file) {
             const url = URL.createObjectURL(file);
             setVideoURL(url);
+            setVideoFile(file); // Store the file for upload
         }
     };
 
@@ -50,23 +53,43 @@ export default function HomePage() {
         setPlayed(playedSeconds);
     };
 
-    const handleEnter = () => {
-        const subtitleData = playedInput.reduce((acc, time, index) => {
-            if (inputs[index].trim() !== '') {
-                acc[time] = inputs[index];
-            }
-            return acc;
-        }, {});
+    const handleEnter = async () => {
+        const scriptArray = playedInput.map((time, index) => ({
+            time: time.toFixed(2),
+            script: inputs[index]
+        }));
 
-        console.log("Subtitle Data:", JSON.stringify(subtitleData, null, 2));
-        // Optionally send or process the subtitleData JSON here
-        // For example: send to server, save to file, etc.
+        const formData = new FormData();
+        formData.append('video', videoFile);
+        formData.append('scriptArray', JSON.stringify(scriptArray));
+
+        console.log("Form Data to be sent:");
+        console.log("Video File:", videoFile);
+        console.log("Script Array:", scriptArray);
+
+        try {
+            // Send POST request to the API
+            const response = await fetch('http://localhost:4000/api/upload', {
+                method: 'POST',
+                body: formData
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                console.log("Response from server:", data);
+                setApiResponse(data); // Store the API response data
+            } else {
+                console.error("Failed to upload:", response.statusText);
+            }
+        } catch (error) {
+            console.error("Error during upload:", error);
+        }
     };
 
     return (
         <div className="container mt-1">
             <header className="header mb-4">
-                <img src={logo} alt="Logo" className="logo"/>
+                <img src={logo} alt="Logo" className="logo" />
             </header>
             <div className="content">
                 <div className="video-section">
@@ -91,7 +114,6 @@ export default function HomePage() {
                         </div>
                     ) : (
                         <div className="react-player-placeholder">
-                            {/* Placeholder box when no video is uploaded */}
                             <div className="gray-box"></div>
                         </div>
                     )}
@@ -134,8 +156,14 @@ export default function HomePage() {
                 >
                     SUBMIT TO GENERATE
                 </button>
+                {/* Display API response */}
+                {apiResponse && (
+                    <div className="api-response mt-4">
+                        <h5>Response from API:</h5>
+                        <pre>{JSON.stringify(apiResponse, null, 2)}</pre>
+                    </div>
+                )}
             </div>
         </div>
     );
 }
-
