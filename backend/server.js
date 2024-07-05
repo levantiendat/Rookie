@@ -1,6 +1,11 @@
 const express = require('express');
 const multer = require('multer');
 const cors = require('cors');
+const fs = require('fs');
+
+const path = require('path');
+const ffmpeg = require('fluent-ffmpeg');
+
 const app = express();
 
 // Middleware để xử lý dữ liệu JSON
@@ -52,6 +57,77 @@ app.post('/api/upload', upload.single('video'), (req, res) => {
     data: { scriptArray: script, videoFile: videoFile.originalname } 
   });
 });
+
+app.post('/merge', upload.fields([
+  { name: 'videoFile', maxCount: 1 },
+  { name: 'audioFiles', maxCount: 10 } // Adjust maxCount as needed
+]), (req, res) => {
+  const videoFile = req.files['videoFile'][0];
+  const audioFiles = req.files['audioFiles'];
+
+  const outputFileName = `merged_${Date.now()}.mp4`;
+  const outputPath = path.join(__dirname, 'uploads', outputFileName);
+
+  let responseSent = false; // Flag to ensure only one response is sent
+
+  // Ensure the upload directory exists
+  if (!fs.existsSync('uploads')) {
+      fs.mkdirSync('uploads');
+  }
+
+  // Create a text file listing the audio files for concatenation
+  const concatListPath = path.join(__dirname, 'uploads', 'concat.txt');
+  const concatList = audioFiles.map(audioFile => `file '${path.join(__dirname, 'uploads', audioFile.filename)}'`).join('\n');
+  fs.writeFileSync(concatListPath, concatList);
+
+  // Concatenate multiple audio files into a single audio file
+  const mergedAudioFileName = `merged_audio_${Date.now()}.mp3`;
+  const mergedAudioPath = path.join(__dirname, 'uploads', mergedAudioFileName);
+
+  ffmpeg()
+    .input(concatListPath)
+    .inputOptions(['-f concat', '-safe 0'])
+    .output(mergedAudioPath)
+    .on('end', () => {
+      // Merge the video with the concatenated audio file
+      ffmpeg()
+        .input(path.join(__dirname, 'uploads', videoFile.filename))
+        .input(mergedAudioPath)
+        .outputOptions([
+          '-c:v copy', // Copy video codec (no re-encoding)
+          '-c:a aac',  // Encode audio to AAC
+          '-map 0:v:0', // Map video stream from the first input
+          '-map 1:a:0', // Map audio stream from the second input
+          '-shortest',  // Ensure the output duration matches the shorter input
+          '-y',         // Overwrite output files without asking
+        ])
+        .output(outputPath)
+        .on('end', () => {
+          if (!responseSent) {
+            responseSent = true;
+            res.send(`Merged file created successfully: ${outputFileName}`);
+          }
+        })
+        .on('error', (err) => {
+          console.error('Error merging video and concatenated audio:', err);
+          if (!responseSent) {
+            responseSent = true;
+            res.status(500).send('Error merging video and concatenated audio');
+          }
+        })
+        .run();
+    })
+    .on('error', (err) => {
+      console.error('Error concatenating audio files:', err);
+      if (!responseSent) {
+        responseSent = true;
+        res.status(500).send('Error concatenating audio files');
+      }
+    })
+    .run();
+});
+
+
 
 // Khởi động server
 const PORT = process.env.PORT || 4000;
