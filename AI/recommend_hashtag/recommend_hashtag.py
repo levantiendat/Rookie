@@ -2,8 +2,11 @@ import pandas as pd
 from mlxtend.preprocessing import TransactionEncoder
 from mlxtend.frequent_patterns import apriori
 import json
+from pathlib import Path
+THIS_FOLDER = Path(__file__).parent.resolve()
+my_file = THIS_FOLDER / "hashtags_trending_video.csv"
 
-def get_non_subset_frequent_itemsets(id_song, file_path = 'hashtags_trending_video.csv', min_support=0.1):
+def get_non_subset_frequent_itemsets(id_song, file_path=my_file, min_support=0.1):
     # Đọc file CSV
     df = pd.read_csv(file_path)
 
@@ -40,8 +43,7 @@ def get_non_subset_frequent_itemsets(id_song, file_path = 'hashtags_trending_vid
     return non_subsets_json
 
 # Gọi hàm và hiển thị kết quả
-
-id_song = 'a001'
-non_subsets_json = get_non_subset_frequent_itemsets(id_song)
-
-non_subsets_json
+if __name__ == "__main__":
+    id_song = 'a001'
+    non_subsets_json = get_non_subset_frequent_itemsets(id_song)
+    print(non_subsets_json) 
