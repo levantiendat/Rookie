@@ -1,0 +1,108 @@
+.container {
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background-color: #f1f1f1;
+  border-bottom: 2px solid #ccc;
+  margin-bottom: 20px;
+}
+
+.title {
+  margin: 0;
+}
+
+.requestAiButton {
+  display: block;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  background-color: #28a745;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  text-align: center;
+  margin-bottom: 10px;
+  width: 100%;
+}
+
+.requestAiButton:hover {
+  background-color: #218838;
+}
+
+.selectedBox {
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin-bottom: 20px;
+  min-height: 50px;
+}
+
+.contentBox {
+  display: flex;
+}
+
+.hashtagSetsBox, .aiRecommendationsBox {
+  border: 1px solid #ccc;
+  padding: 10px;
+  max-height: 400px;
+  overflow-y: scroll;
+  flex: 1;
+  margin-right: 10px;
+}
+
+.hashtagSet {
+  margin-bottom: 10px;
+  border: 1px solid #aaa;
+  border-radius: 5px;
+  padding: 10px;
+  background-color: #f9f9f9;
+}
+
+.hashtagSetButton {
+  font-weight: bold;
+  cursor: pointer;
+  margin-bottom: 5px;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 5px;
+  background-color: #007bff;
+  color: white;
+  text-decoration: none;
+  width: 100%;
+}
+
+.hashtagSetButton.selected {
+  background-color: #0056b3;
+}
+
+.hashtagSetContent, .recommendationContent {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.hashtag {
+  display: inline-block;
+  padding: 5px;
+  margin: 5px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  cursor: pointer;
+  background-color: #fff;
+}
+
+.hashtag.selected {
+  background-color: #a3c9f9;
+}
+
+.hashtag button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: red;
+  margin-left: 5px;
+}
