@@ -88,9 +88,6 @@ export default function HomePage() {
 
     return (
         <div className="container mt-1">
-            <header className="header mb-4">
-                <img src={logo} alt="Logo" className="logo" />
-            </header>
             <div className="content">
                 <div className="video-section">
                     <div className="mb-3">

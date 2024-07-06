@@ -1,0 +1,72 @@
+@font-face {
+    font-family: "Raleway";
+    src: url("../../public/Raleway-VariableFont_wght.ttf") format("woff");
+    font-style: normal;
+  }
+  
+  .home-container {
+    width: 100%;
+  }
+  
+  .top-banner {
+    background-color: #388c9b;
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .top-banner-illust {
+    width: 800px;
+    height: 400px;
+    background: url("../../public/illust.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+    margin-top: auto;
+    margin-left: 100px;
+  }
+  
+  .top-banner-content {
+    color: white;
+    font-family: Raleway;
+    margin: 100px 100px 0 50px;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .top-banner-heading {
+    font-weight: 700;
+    font-size: 48px;
+  }
+  
+  .top-banner-body {
+    margin-top: 30px;
+    font-size: 18px;
+  }
+  
+  .start-relay-btn {
+    width: 200px;
+    height: 50px;
+    font-size: 18px;
+    background-color: #114969;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+    margin-top: 50px;
+    text-decoration: none;
+    color: #fff; /* Ensures the text color is white */
+  }
+  
+  .start-relay-btn:visited {
+    color: #fff;
+  }
+  
+  .start-relay-btn:hover {
+    background-color: #6fb1d8;
+    transition: background-color 0.3s ease;
+    cursor: pointer;
+  }
+  
+  .start-relay-btn:active {
+    background-color: rgb(26, 93, 132);
+  }
+  

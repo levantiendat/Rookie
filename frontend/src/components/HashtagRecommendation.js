@@ -45,9 +45,6 @@ const HashtagSelector = () => {
 
   return (
     <div className="container">
-      <div className="navbar">
-        <h1 className="title">Hashtag Generation</h1>
-      </div>
       <div className="selectedBox">
         {selectedHashtags.length > 0 ? (
           selectedHashtags.map((hashtag, index) => (
