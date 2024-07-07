@@ -2,7 +2,6 @@ const express = require('express');
 const multer = require('multer');
 const cors = require('cors');
 const fs = require('fs');
-
 const path = require('path');
 const ffmpeg = require('fluent-ffmpeg');
 
@@ -127,7 +126,17 @@ app.post('/merge', upload.fields([
     .run();
 });
 
-
+// Route để phục vụ video
+app.get('/api/video', (req, res) => {
+  const videoPath = path.join(__dirname, 'uploads', 'merged_1720338277810.mp4');
+  
+  // Kiểm tra file tồn tại
+  if (!fs.existsSync(videoPath)) {
+    return res.status(404).send('Video not found');
+  }
+  
+  res.sendFile(videoPath);
+});
 
 // Khởi động server
 const PORT = process.env.PORT || 4000;

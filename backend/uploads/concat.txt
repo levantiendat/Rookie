@@ -1,2 +1,4 @@
-file '/Users/longvu/Desktop/Rookie/backend/uploads/Standard recording 32.mp3'
-file '/Users/longvu/Desktop/Rookie/backend/uploads/happy-birthday-in-english-male-15023.mp3'
+file 'D:\reactjs\Rookie\backend\uploads\output_1.wav'
+file 'D:\reactjs\Rookie\backend\uploads\output_2.wav'
+file 'D:\reactjs\Rookie\backend\uploads\output_3.wav'
+file 'D:\reactjs\Rookie\backend\uploads\output_4.wav'

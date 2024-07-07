@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import ReactPlayer from 'react-player';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './HomePage.css';
-import video from './videos/output.mp4'
 import logo from './Tiktok_background.png';  // Import the logo image
 
 export default function HomePage() {
@@ -87,8 +86,25 @@ export default function HomePage() {
         }
     };
 
+    const handleFetchVideo = async () => {
+        try {
+            const response = await fetch('http://localhost:4000/api/video');
+            if (response.ok) {
+                const blob = await response.blob();
+                const videoUrl = URL.createObjectURL(blob);
+                setVideoURL(videoUrl); // Store the URL for ReactPlayer
+                setShowModal(true); // Show modal to display the video
+            } else {
+                console.error('Failed to fetch video:', response.statusText);
+            }
+        } catch (error) {
+            console.error('Error fetching video:', error);
+        }
+    };
+
     const handleCloseModal = () => {
         setShowModal(false);
+        setVideoURL(null); // Clear video URL when closing modal
     };
 
     return (
@@ -159,6 +175,12 @@ export default function HomePage() {
                 >
                     SUBMIT TO GENERATE
                 </button>
+                <button 
+                    onClick={handleFetchVideo} 
+                    className="btn btn-secondary mt-3"
+                >
+                    FETCH VIDEO FROM SERVER
+                </button>
             </div>
             
             {/* Modal for displaying API response */}
@@ -167,10 +189,10 @@ export default function HomePage() {
                     <div className="modal-content">
                         <span className="close" onClick={handleCloseModal}>&times;</span>
                         <h5>Result:</h5>
-                        {apiResponse && (
+                        {videoURL && (
                             <div className="react-player-wrapper">
                                 <ReactPlayer
-                                    url={video}
+                                    url={videoURL}
                                     controls={true}
                                     className="react-player"
                                 />
