@@ -25,10 +25,15 @@ def recommend_hashtag_chatgpt(text):
 
     # Hàm để chuyển hashtags thành định dạng JSON
     def convert_hashtags_to_json(hashtags):
-        # Giả sử hashtags được trả về là một chuỗi với các hashtags được phân tách bằng dấu phẩy
+        # Chuyển đổi hashtags thành một danh sách các hashtag, mỗi hashtag bắt đầu bằng "#"
         hashtag_list = [tag.strip() for tag in hashtags.split('#') if tag.strip()]
         hashtag_list = ['#' + tag for tag in hashtag_list]
-        return json.dumps({"hashtag": hashtag_list}, ensure_ascii=False)
+    
+        # Tạo một đối tượng Python với key là "hashtag" và value là danh sách các hashtag
+        hashtags_dict = {"hashtag": hashtag_list}
+    
+        # Chuyển đổi đối tượng Python thành JSON và trả về
+        return json.dumps(hashtags_dict, ensure_ascii=False)
     
     hashtags_json = convert_hashtags_to_json(hashtags)
     return hashtags_json

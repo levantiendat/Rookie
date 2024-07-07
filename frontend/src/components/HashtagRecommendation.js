@@ -38,9 +38,39 @@ const HashtagSelector = () => {
   };
 
   const requestAiRecommendations = () => {
-    // Đây là ví dụ để giả lập request từ AI
-    const newRecommendations = ['hashtag5', 'hashtag9', 'hashtag8', 'hashtag10', 'hashtag11'];
-    setAiRecommendations(newRecommendations);
+    fetch('http://localhost:5000/rookie_api/hashtag/ai-requested', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: new URLSearchParams({
+        'text': "Welcome to Rookie Can Cook, where beginners can become great chefs! Today, we'll explore how to make a fresh and delicious salad that's simple yet delightful. Don't forget to hit 'Like' and 'Subscribe' so you won't miss any exciting recipes! Okay then - Let's get into the kitchen and start cooking!"
+      }),
+    })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then(data => {
+        console.log('Response from AI:', data); // In kết quả nhận được từ API vào console log
+        // Chuyển đổi JSON thành đối tượng JavaScript
+        const responseObject = JSON.parse(data);
+
+        // Lấy mảng hashtag từ đối tượng responseObject
+        const hashtags = responseObject.hashtag;
+
+        console.log('Response from AI.tag:',hashtags); // In ra mảng các hashtag
+        if (hashtags) {
+          setAiRecommendations(hashtags);
+        } else {
+          throw new Error('Invalid response format');
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
   };
 
   return (
