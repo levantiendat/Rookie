@@ -1,12 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './HashtagRecommendation.css';
 
-const hashtagSets = [
-  ['hashtag1', 'hashtag2', 'hashtag3'],
-  ['hashtag1', 'hashtag2', 'hashtag4'],
-  ['hashtag5', 'hashtag6'],
-  ['hashtag7', 'hashtag8']
-];
 
 const initialAiRecommendations = [];
 
@@ -14,6 +8,47 @@ const HashtagSelector = () => {
   const [selectedHashtags, setSelectedHashtags] = useState([]);
   const [selectedSets, setSelectedSets] = useState([]);
   const [aiRecommendations, setAiRecommendations] = useState(initialAiRecommendations);
+  const [hashtagSets, setHashtagSets] = useState([]);
+
+  useEffect(() => {
+    // Fetch hashtag sets from the API on component mount
+    fetchHashtagSets();
+  }, []);
+
+  const fetchHashtagSets = () => {
+    const ids = ['a001', 'a002', 'a003'];
+    const randomId = ids[Math.floor(Math.random() * ids.length)];
+    
+    fetch('http://localhost:5000/rookie_api/hashtag/recommend-hashtag', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        'id': randomId  // Sử dụng ID ngẫu nhiên
+      }),
+    })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then(data => {
+        console.log('Response from Frequent Itemsets API:', JSON.parse(data)); // Log dữ liệu nhận được để debug
+        // if (data && Array.isArray((data['frequent_hashtags']))) {
+        //   setHashtagSets(JSON.parse(data['frequent_hashtags'])); // Lưu dữ liệu vào hashtagSets
+        // } else {
+        //   throw new Error('Invalid response format');
+        // }
+        let hashList = JSON.parse(data)
+        setHashtagSets(hashList["frequent_hashtags"])
+        console.log(typeof(JSON.parse(data)))
+      })
+      .catch(error => {
+        console.error('Error fetching hashtag sets:', error);
+      });
+  };
 
   const handleHashtagClick = (hashtag) => {
     if (!selectedHashtags.includes(hashtag)) {
@@ -54,16 +89,9 @@ const HashtagSelector = () => {
         return response.json();
       })
       .then(data => {
-        console.log('Response from AI:', data); // In kết quả nhận được từ API vào console log
-        // Chuyển đổi JSON thành đối tượng JavaScript
-        const responseObject = JSON.parse(data);
-
-        // Lấy mảng hashtag từ đối tượng responseObject
-        const hashtags = responseObject.hashtag;
-
-        console.log('Response from AI.tag:',hashtags); // In ra mảng các hashtag
-        if (hashtags) {
-          setAiRecommendations(hashtags);
+        console.log('Response from AI:', data); // Log dữ liệu nhận được để debug
+        if (data && Array.isArray(data.hashtag)) {
+          setAiRecommendations(data.hashtag); // Cập nhật aiRecommendations
         } else {
           throw new Error('Invalid response format');
         }
@@ -88,27 +116,31 @@ const HashtagSelector = () => {
       </div>
       <div className="contentBox">
         <div className="hashtagSetsBox">
-          {hashtagSets.map((set, index) => (
-            <div key={index} className="hashtagSet">
-              <button 
-                className={`hashtagSetButton ${selectedSets.includes(index) ? 'selected' : ''}`} 
-                onClick={() => handleSetClick(set, index)}
-              >
-                Select Set {index + 1}
-              </button>
-              <div className="hashtagSetContent">
-                {set.map((hashtag, idx) => (
-                  <span 
-                    key={idx} 
-                    className={`hashtag ${selectedHashtags.includes(hashtag) ? 'selected' : ''}`}
-                    onClick={() => handleHashtagClick(hashtag)}
-                  >
-                    #{hashtag}
-                  </span>
-                ))}
+          {hashtagSets.length > 0 ? (
+            hashtagSets.map((set, index) => (
+              <div key={index} className="hashtagSet">
+                <button 
+                  className={`hashtagSetButton ${selectedSets.includes(index) ? 'selected' : ''}`} 
+                  onClick={() => handleSetClick(set, index)}
+                >
+                  Select Set {index + 1}
+                </button>
+                <div className="hashtagSetContent">
+                  {set.map((hashtag, idx) => (
+                    <span 
+                      key={idx} 
+                      className={`hashtag ${selectedHashtags.includes(hashtag) ? 'selected' : ''}`}
+                      onClick={() => handleHashtagClick(hashtag)}
+                    >
+                      #{hashtag}
+                    </span>
+                  ))}
+                </div>
               </div>
-            </div>
-          ))}
+            ))
+          ) : (
+            <p>No hashtag sets available</p>
+          )}
         </div>
         <div className="aiRecommendationsBox">
           <button className="requestAiButton" onClick={requestAiRecommendations}>Request Hashtags from AI</button>

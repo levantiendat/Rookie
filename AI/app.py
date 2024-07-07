@@ -16,8 +16,8 @@ def test():
 def RecommendHashtag():
     received_id_song = request.json
     # TODO: Call get_non_subset_frequent_itemsets(id) to get list of sets of hashtag
-    print("RECEIVED: " + received_id_song['id_song'])
-    response = get_non_subset_frequent_itemsets(received_id_song['id_song'])
+    print("RECEIVED: " + received_id_song['id'])
+    response = get_non_subset_frequent_itemsets(received_id_song['id'])
     return jsonify(response)
 
 @app.route('/rookie_api/hashtag/ai-requested', methods=["POST"])

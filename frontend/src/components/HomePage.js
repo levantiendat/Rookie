@@ -86,21 +86,21 @@ export default function HomePage() {
         }
     };
 
-    const handleFetchVideo = async () => {
-        try {
-            const response = await fetch('http://localhost:4000/api/video');
-            if (response.ok) {
-                const blob = await response.blob();
-                const videoUrl = URL.createObjectURL(blob);
-                setVideoURL(videoUrl); // Store the URL for ReactPlayer
-                setShowModal(true); // Show modal to display the video
-            } else {
-                console.error('Failed to fetch video:', response.statusText);
-            }
-        } catch (error) {
-            console.error('Error fetching video:', error);
-        }
-    };
+    // const handleFetchVideo = async () => {
+    //     try {
+    //         const response = await fetch('http://localhost:4000/api/video');
+    //         if (response.ok) {
+    //             const blob = await response.blob();
+    //             const videoUrl = URL.createObjectURL(blob);
+    //             setVideoURL(videoUrl); // Store the URL for ReactPlayer
+    //             setShowModal(true); // Show modal to display the video
+    //         } else {
+    //             console.error('Failed to fetch video:', response.statusText);
+    //         }
+    //     } catch (error) {
+    //         console.error('Error fetching video:', error);
+    //     }
+    // };
 
     const handleCloseModal = () => {
         setShowModal(false);
@@ -175,12 +175,7 @@ export default function HomePage() {
                 >
                     SUBMIT TO GENERATE
                 </button>
-                <button 
-                    onClick={handleFetchVideo} 
-                    className="btn btn-secondary mt-3"
-                >
-                    FETCH VIDEO FROM SERVER
-                </button>
+                
             </div>
             
             {/* Modal for displaying API response */}
