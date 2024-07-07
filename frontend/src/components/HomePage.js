@@ -15,6 +15,8 @@ export default function HomePage() {
     const [isEnterEnabled, setIsEnterEnabled] = useState(false);
     const [apiResponse, setApiResponse] = useState(null); // State to store API response
     const [showModal, setShowModal] = useState(false); // State to control modal visibility
+    const [showSuccessModal, setShowSuccessModal] = useState(false); // State to control success modal visibility
+    const [isResultEnable, setResultEnable] = useState(false)
 
     useEffect(() => {
         // Enable the "Enter" button only if all input fields are filled
@@ -67,6 +69,12 @@ export default function HomePage() {
         console.log("Script Array:", scriptArray);
 
         try {
+            // Simulate waiting for 30 seconds (for demonstration)
+            await new Promise(resolve => setTimeout(resolve, 10000));
+
+            // Show success modal after 30 seconds
+            
+            
             // Send POST request to the API
             const response = await fetch('http://localhost:4000/api/upload', {
                 method: 'POST',
@@ -77,34 +85,43 @@ export default function HomePage() {
                 const data = await response.json();
                 console.log("Response from server:", data);
                 setApiResponse(data); // Store the API response data
-                setShowModal(true); // Show the modal with API response
+                // setShowModal(true); // Show the modal with API response
+                setShowSuccessModal(true);
+                setResultEnable(true);
+                console.log(isResultEnable);
+                console.log(showSuccessModal);
             } else {
                 console.error("Failed to upload:", response.statusText);
             }
         } catch (error) {
             console.error("Error during upload:", error);
         }
+        
     };
 
-    // const handleFetchVideo = async () => {
-    //     try {
-    //         const response = await fetch('http://localhost:4000/api/video');
-    //         if (response.ok) {
-    //             const blob = await response.blob();
-    //             const videoUrl = URL.createObjectURL(blob);
-    //             setVideoURL(videoUrl); // Store the URL for ReactPlayer
-    //             setShowModal(true); // Show modal to display the video
-    //         } else {
-    //             console.error('Failed to fetch video:', response.statusText);
-    //         }
-    //     } catch (error) {
-    //         console.error('Error fetching video:', error);
-    //     }
-    // };
+    const handleFetchVideo = async () => {
+        try {
+            const response = await fetch('http://localhost:4000/api/video');
+            if (response.ok) {
+                const blob = await response.blob();
+                const videoUrl = URL.createObjectURL(blob);
+                setVideoURL(videoUrl); // Store the URL for ReactPlayer
+                setShowModal(true); // Show modal to display the video
+            } else {
+                console.error('Failed to fetch video:', response.statusText);
+            }
+        } catch (error) {
+            console.error('Error fetching video:', error);
+        }
+    };
 
     const handleCloseModal = () => {
         setShowModal(false);
         setVideoURL(null); // Clear video URL when closing modal
+    };
+
+    const handleCloseSuccessModal = () => {
+        setShowSuccessModal(false);
     };
 
     return (
@@ -176,6 +193,14 @@ export default function HomePage() {
                     SUBMIT TO GENERATE
                 </button>
                 
+                <button
+                    onClick={handleFetchVideo}
+                    className="btn btn-secondary mt-3"
+                    disabled={!isResultEnable}
+                >
+                    RESULT
+                </button>
+
             </div>
             
             {/* Modal for displaying API response */}
@@ -193,6 +218,17 @@ export default function HomePage() {
                                 />
                             </div>
                         )}
+                    </div>
+                </div>
+            )}
+
+            {/* Modal for displaying success message */}
+            {showSuccessModal && (
+                <div id="successModal" className="modal">
+                    <div className="modal-content">
+                        <span className="close" onClick={handleCloseSuccessModal}>&times;</span>
+                        <h5>Upload and Merged Success!</h5>
+                        <p>Your video and audio have been successfully uploaded and merged.</p>
                     </div>
                 </div>
             )}

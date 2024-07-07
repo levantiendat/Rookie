@@ -90,11 +90,14 @@ const HashtagSelector = () => {
       })
       .then(data => {
         console.log('Response from AI:', data); // Log dữ liệu nhận được để debug
-        if (data && Array.isArray(data.hashtag)) {
-          setAiRecommendations(data.hashtag); // Cập nhật aiRecommendations
-        } else {
-          throw new Error('Invalid response format');
-        }
+        // if (data && Array.isArray(data.hashtag)) {
+        //   setAiRecommendations(data.hashtag); // Cập nhật aiRecommendations
+        // } else {
+        //   throw new Error('Invalid response format');
+        // }
+        let responseHashtag;
+        responseHashtag = JSON.parse(data)
+        setAiRecommendations(responseHashtag['hashtag'])
       })
       .catch(error => {
         console.error('Error:', error);
