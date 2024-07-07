@@ -2,18 +2,20 @@ import React, { useState, useEffect } from 'react';
 import ReactPlayer from 'react-player';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './HomePage.css';
+import video from './videos/output.mp4'
 import logo from './Tiktok_background.png';  // Import the logo image
 
 export default function HomePage() {
     const [videoURL, setVideoURL] = useState(null);
     const [videoFile, setVideoFile] = useState(null);
-    const [audioURL, setAudioURL] = useState(null);
+    const [audioFiles, setAudioFiles] = useState([]);
     const [subtitles, setSubtitles] = useState([]);
     const [played, setPlayed] = useState(0);
     const [playedInput, setPlayedInput] = useState([]);
     const [inputs, setInputs] = useState([]);
     const [isEnterEnabled, setIsEnterEnabled] = useState(false);
     const [apiResponse, setApiResponse] = useState(null); // State to store API response
+    const [showModal, setShowModal] = useState(false); // State to control modal visibility
 
     useEffect(() => {
         // Enable the "Enter" button only if all input fields are filled
@@ -41,11 +43,9 @@ export default function HomePage() {
     };
 
     const handleAudioUpload = (event) => {
-        const file = event.target.files[0];
-        if (file) {
-            const url = URL.createObjectURL(file);
-            setAudioURL(url);
-        }
+        const files = Array.from(event.target.files);
+        const urls = files.map(file => URL.createObjectURL(file));
+        setAudioFiles(urls); // Store the files for upload
     };
 
     const handleProgress = ({ playedSeconds }) => {
@@ -78,12 +78,17 @@ export default function HomePage() {
                 const data = await response.json();
                 console.log("Response from server:", data);
                 setApiResponse(data); // Store the API response data
+                setShowModal(true); // Show the modal with API response
             } else {
                 console.error("Failed to upload:", response.statusText);
             }
         } catch (error) {
             console.error("Error during upload:", error);
         }
+    };
+
+    const handleCloseModal = () => {
+        setShowModal(false);
     };
 
     return (
@@ -119,13 +124,14 @@ export default function HomePage() {
                         <input 
                             type="file" 
                             accept="audio/*" 
+                            multiple 
                             onChange={handleAudioUpload} 
                             className="form-control" 
                             id="audioUpload"
                         />
-                        {audioURL && (
-                            <audio controls src={audioURL} className="mt-2" />
-                        )}
+                        {audioFiles.length > 0 && audioFiles.map((url, index) => (
+                            <audio key={index} controls src={url} className="mt-2" />
+                        ))}
                     </div>
                 </div>
                 <div className="inputs-section mt-3">
@@ -153,14 +159,26 @@ export default function HomePage() {
                 >
                     SUBMIT TO GENERATE
                 </button>
-                {/* Display API response */}
-                {apiResponse && (
-                    <div className="api-response mt-4">
-                        <h5>Response from API:</h5>
-                        <pre>{JSON.stringify(apiResponse, null, 2)}</pre>
-                    </div>
-                )}
             </div>
+            
+            {/* Modal for displaying API response */}
+            {showModal && (
+                <div id="myModal" className="modal">
+                    <div className="modal-content">
+                        <span className="close" onClick={handleCloseModal}>&times;</span>
+                        <h5>Result:</h5>
+                        {apiResponse && (
+                            <div className="react-player-wrapper">
+                                <ReactPlayer
+                                    url={video}
+                                    controls={true}
+                                    className="react-player"
+                                />
+                            </div>
+                        )}
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

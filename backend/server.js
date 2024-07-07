@@ -54,7 +54,7 @@ app.post('/api/upload', upload.single('video'), (req, res) => {
   // Phản hồi lại client
   res.status(200).json({ 
     message: 'Thông tin đã được nhận thành công.', 
-    data: { scriptArray: script, videoFile: videoFile.originalname } 
+    data: { scriptArray: script, videoFile: videoFile.originalname, url: "D:\\academy\\Competitions\\Tiktok_TECHJAM\\Rookie\\frontend\\src\\components\\videos\\output.mp4"} 
   });
 });
 
