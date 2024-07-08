@@ -23,7 +23,7 @@ This platform aims to support users in creating videos with a user-friendly home
 
 > Check out our demonstration here:
 
-{%youtube HFKwWb8UNxI %}
+[![](https://markdown-videos-api.jorgenkh.no/youtube/HFKwWb8UNxI?si=3z27RFMlxgPdMZWY)]([https://youtu.be/dQw4w9WgXcQ](https://youtu.be/HFKwWb8UNxI?si=3z27RFMlxgPdMZWY))
 
 ---
 
