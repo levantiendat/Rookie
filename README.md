@@ -1,9 +1,4 @@
 # ROOKIE GENERATOR - TIKTOK TECHJAM 2024
----
-
-We have a collaborative session
-
-Please prepare laptop or smartphone to join!
 
 ---
 
