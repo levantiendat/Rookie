@@ -1,7 +1,6 @@
 # ROOKIE GENERATOR - TIKTOK TECHJAM 2024
 <!-- Put the link to this slide here so people can follow -->
-Slide show:
-https://www.canva.com/design/DAGKL6kyB1Q/x3AtuBNw5T5vRqCUYmzRng/edit
+[Slide show](https://www.canva.com/design/DAGKL6kyB1Q/mtDv_U36yMK29Eb0Sho5NQ/view?utm_content=DAGKL6kyB1Q&utm_campaign=designshare&utm_medium=link&utm_source=editor)
 ---
 
 We have a collaborative session
